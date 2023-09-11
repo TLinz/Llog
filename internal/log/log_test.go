@@ -1,4 +1,3 @@
-// START: intro
 package log
 
 import (
@@ -38,9 +37,6 @@ func TestLog(t *testing.T) {
 	}
 }
 
-// END: intro
-
-// START: append_read
 func testAppendRead(t *testing.T, log *Log) {
 	append := &api.Record{
 		Value: []byte("hello world"),
@@ -54,18 +50,12 @@ func testAppendRead(t *testing.T, log *Log) {
 	require.Equal(t, append.Value, read.Value)
 }
 
-// END: append_read
-
-// START: out_of_range
 func testOutOfRangeErr(t *testing.T, log *Log) {
 	read, err := log.Read(1)
 	require.Nil(t, read)
 	require.Error(t, err)
 }
 
-// END: out_of_range
-
-// START: init_existing
 func testInitExisting(t *testing.T, o *Log) {
 	append := &api.Record{
 		Value: []byte("hello world"),
@@ -94,9 +84,6 @@ func testInitExisting(t *testing.T, o *Log) {
 	require.Equal(t, uint64(2), off)
 }
 
-// END: init_existing
-
-// START: reader
 func testReader(t *testing.T, log *Log) {
 	append := &api.Record{
 		Value: []byte("hello world"),
@@ -115,9 +102,6 @@ func testReader(t *testing.T, log *Log) {
 	require.Equal(t, append.Value, read.Value)
 }
 
-// END: reader
-
-// START: truncate
 func testTruncate(t *testing.T, log *Log) {
 	append := &api.Record{
 		Value: []byte("hello world"),
@@ -133,8 +117,6 @@ func testTruncate(t *testing.T, log *Log) {
 	_, err = log.Read(0)
 	require.Error(t, err)
 }
-
-// END: truncate
 
 func testLotsOfAppend(t *testing.T, log *Log) {
 	rc := &api.Record{

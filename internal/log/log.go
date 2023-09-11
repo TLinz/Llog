@@ -1,4 +1,3 @@
-// START: begin
 package log
 
 import (
@@ -25,9 +24,6 @@ type Log struct {
 	segments      []*segment
 }
 
-// END: begin
-
-// START: newlog
 func NewLog(dir string, c Config) (*Log, error) {
 	if c.Segment.MaxStoreBytes == 0 {
 		c.Segment.MaxStoreBytes = 1024
@@ -43,9 +39,6 @@ func NewLog(dir string, c Config) (*Log, error) {
 	return l, l.setup()
 }
 
-// END: newlog
-
-// START: setup
 func (l *Log) setup() error {
 	files, err := ioutil.ReadDir(l.Dir)
 	if err != nil {
@@ -79,9 +72,6 @@ func (l *Log) setup() error {
 	return nil
 }
 
-// END: setup
-
-// START: append
 func (l *Log) Append(record *api.Record) (uint64, error) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
@@ -104,9 +94,6 @@ func (l *Log) Append(record *api.Record) (uint64, error) {
 	return off, nil
 }
 
-// END: append
-
-// START: read
 func (l *Log) Read(off uint64) (*api.Record, error) {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
@@ -117,17 +104,12 @@ func (l *Log) Read(off uint64) (*api.Record, error) {
 			break
 		}
 	}
-	// START: before
 	if s == nil || s.nextOffset <= off {
 		return nil, fmt.Errorf("offset out of range: %d", off)
 	}
-	// END: before
 	return s.Read(off)
 }
 
-// END: read
-
-// START: newsegment
 func (l *Log) newSegment(off uint64) error {
 	s, err := newSegment(l.Dir, off, l.Config)
 	if err != nil {
@@ -138,9 +120,6 @@ func (l *Log) newSegment(off uint64) error {
 	return nil
 }
 
-// END: newsegment
-
-// START: close
 func (l *Log) Close() error {
 	l.mu.Lock()
 	defer l.mu.Unlock()
@@ -166,9 +145,6 @@ func (l *Log) Reset() error {
 	return l.setup()
 }
 
-// END: close
-
-// START: offsets
 func (l *Log) LowestOffset() (uint64, error) {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
@@ -185,9 +161,6 @@ func (l *Log) HighestOffset() (uint64, error) {
 	return off - 1, nil
 }
 
-// END: offsets
-
-// START: truncate
 func (l *Log) Truncate(lowest uint64) error {
 	l.mu.Lock()
 	defer l.mu.Unlock()
@@ -205,9 +178,6 @@ func (l *Log) Truncate(lowest uint64) error {
 	return nil
 }
 
-// END: truncate
-
-// START: reader
 func (l *Log) Reader() io.Reader {
 	l.mu.RLock()
 	defer l.mu.RUnlock()
@@ -228,5 +198,3 @@ func (o *originReader) Read(p []byte) (int, error) {
 	o.off += int64(n)
 	return n, err
 }
-
-// END: reader

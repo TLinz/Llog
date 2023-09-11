@@ -1,4 +1,3 @@
-// START: intro
 package log
 
 import (
@@ -30,9 +29,6 @@ func TestStoreAppendRead(t *testing.T) {
 	testRead(t, s)
 }
 
-// END: intro
-
-// START: end
 func testAppend(t *testing.T, s *store) {
 	t.Helper()
 	for i := uint64(1); i < 4; i++ {
@@ -72,9 +68,6 @@ func testReadAt(t *testing.T, s *store) {
 	}
 }
 
-// END: end
-
-// START: close
 func TestStoreClose(t *testing.T) {
 	f, err := os.CreateTemp("", "store_close_test")
 	require.NoError(t, err)
