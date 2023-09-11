@@ -103,5 +103,3 @@ func openFile(name string) (file *os.File, size int64, err error) {
 	}
 	return f, fi.Size(), nil
 }
-
-// END: close
