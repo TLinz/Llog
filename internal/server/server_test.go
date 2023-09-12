@@ -18,9 +18,9 @@ func TestServer(t *testing.T) {
 		client api.LogClient,
 		config *Config,
 	){
-		"produce/consume a message to/from the log succeeeds": testProduceConsume,
-		"produce/consume stream succeeds":                     testProduceConsumeStream,
-		"consume past log boundary fails":                     testConsumePastBoundary,
+		"produce/consume a message to/from the log succeeds": testProduceConsume,
+		"produce/consume stream succeeds":                    testProduceConsumeStream,
+		"consume past log boundary fails":                    testConsumePastBoundary,
 	} {
 		t.Run(scenario, func(t *testing.T) {
 			client, config, teardown := setupTest(t, nil)
@@ -39,6 +39,13 @@ func setupTest(t *testing.T, fn func(*Config)) (
 
 	l, err := net.Listen("tcp", ":0")
 	require.NoError(t, err)
+
+	// clientTLSConfig, err := config.SetupTLSConfig(
+	// 	config.TLSConfig{
+	// 		CAFile: config.CAFile,
+	// 	}
+	// )
+	// require.NoError(t, err)
 
 	clientOptions := []grpc.DialOption{grpc.WithInsecure()}
 	cc, err := grpc.Dial(l.Addr().String(), clientOptions...)
