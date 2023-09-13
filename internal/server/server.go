@@ -120,7 +120,7 @@ func (s *grpcServer) Consume(ctx context.Context, req *api.ConsumeRequest) (
 	if err := s.Authorizer.Authorize(
 		subject(ctx),
 		objectWildcard,
-		produceAction,
+		consumeAction,
 	); err != nil {
 		return nil, err
 	}
