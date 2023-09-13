@@ -1,4 +1,3 @@
-// START: func
 package config
 
 import (
