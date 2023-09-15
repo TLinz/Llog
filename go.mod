@@ -72,6 +72,7 @@ require (
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/hashicorp/raft-boltdb v0.0.0-20230125174641-2a8082862702
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/soheilhy/cmux v0.1.5
 	github.com/travisjeffery/go-dynaport v1.0.0
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
