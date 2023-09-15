@@ -273,8 +273,7 @@ func testProduceConsumeStream(
 
 func testUnauthorized(
 	t *testing.T,
-	_,
-	client api.LogClient,
+	_, client api.LogClient,
 	config *Config,
 ) {
 	ctx := context.Background()

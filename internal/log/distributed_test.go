@@ -41,9 +41,6 @@ func TestMultipleNodes(t *testing.T) {
 		config.Raft.ElectionTimeout = 50 * time.Millisecond
 		config.Raft.LeaderLeaseTimeout = 50 * time.Millisecond
 		config.Raft.CommitTimeout = 5 * time.Millisecond
-		// END: distributed_log_test_intro
-
-		// START: distributed_log_test_cont
 
 		if i == 0 {
 			config.Raft.Bootstrap = true

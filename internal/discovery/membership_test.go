@@ -30,7 +30,7 @@ func TestMembership(t *testing.T) {
 			len(handler.leaves) == 1
 	}, 3*time.Second, 250*time.Millisecond)
 
-	require.Equal(t, fmt.Sprintf("%d", 2), <-handler.leaves) // ?
+	require.Equal(t, fmt.Sprintf("%d", 2), <-handler.leaves)
 }
 
 func setupMember(t *testing.T, members []*Membership) (
