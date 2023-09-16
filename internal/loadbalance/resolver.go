@@ -14,9 +14,16 @@ import (
 )
 
 type Resolver struct {
-	mu            sync.Mutex
-	clientConn    resolver.ClientConn
-	resolverConn  *grpc.ClientConn
+	mu sync.Mutex
+
+	// User’s client connection and gRPC passes it to the resolver
+	// for the resolver to update with the servers it discovers.
+	clientConn resolver.ClientConn
+
+	// resolver’s own client connection to the server so it can
+	// call GetServers() and get the servers.
+	resolverConn *grpc.ClientConn
+
 	serviceConfig *serviceconfig.ParseResult
 	logger        *zap.Logger
 }
@@ -53,10 +60,6 @@ const Name = "Llog"
 
 func (r *Resolver) Scheme() string {
 	return Name
-}
-
-func init() {
-	resolver.Register(&Resolver{})
 }
 
 var _ resolver.Resolver = (*Resolver)(nil)
@@ -98,4 +101,9 @@ func (r *Resolver) Close() {
 			zap.Error(err),
 		)
 	}
+}
+
+// Automatically called when a package is initialized.
+func init() {
+	resolver.Register(&Resolver{})
 }

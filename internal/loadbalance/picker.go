@@ -65,6 +65,7 @@ func (p *Picker) nextFollower() balancer.SubConn {
 	return p.followers[idx]
 }
 
+// Automatically called when a package is initialized.
 func init() {
 	balancer.Register(
 		base.NewBalancerBuilder(Name, &Picker{}, base.Config{}),
