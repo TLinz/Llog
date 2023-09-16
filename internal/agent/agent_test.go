@@ -12,6 +12,7 @@ import (
 	api "github.com/TLinz/Llog/api/v1"
 	"github.com/TLinz/Llog/internal/agent"
 	"github.com/TLinz/Llog/internal/config"
+	"github.com/TLinz/Llog/internal/loadbalance"
 	"github.com/stretchr/testify/require"
 	"github.com/travisjeffery/go-dynaport"
 	"google.golang.org/grpc"
@@ -91,6 +92,9 @@ func TestAgent(t *testing.T) {
 		},
 	)
 	require.NoError(t, err)
+
+	time.Sleep(3 * time.Second)
+
 	consumeResponse, err := leaderClient.Consume(
 		context.Background(),
 		&api.ConsumeRequest{
@@ -135,8 +139,15 @@ func client(
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(tlsCreds)}
 	rpcAddr, err := agent.Config.RPCAddr()
 	require.NoError(t, err)
-	conn, err := grpc.Dial(rpcAddr, opts...)
+
+	conn, err := grpc.Dial(fmt.Sprintf(
+		"%s:///%s", loadbalance.Name, rpcAddr,
+	), opts...)
 	require.NoError(t, err)
+
+	// conn, err := grpc.Dial(rpcAddr, opts...)
+	// require.NoError(t, err)
+
 	client := api.NewLogClient(conn)
 	return client
 }

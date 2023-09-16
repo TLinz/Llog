@@ -33,6 +33,9 @@ type Authorizer interface {
 type Config struct {
 	CommitLog  CommitLog
 	Authorizer Authorizer
+	// We don’t want to add the GetServers() method to CommitLog interface
+	// because a non-distributed log like our Log type doesn’t know about servers.
+	GetServerer GetServerer
 }
 
 // Matching the values in ACL policy table.
@@ -173,6 +176,21 @@ func (s *grpcServer) ConsumeStream(
 			req.Offset++
 		}
 	}
+}
+
+func (s *grpcServer) GetServers(
+	ctx context.Context, req *api.GetServersRequest,
+) (
+	*api.GetServersResponse, error) {
+	servers, err := s.GetServerer.GetServers()
+	if err != nil {
+		return nil, err
+	}
+	return &api.GetServersResponse{Servers: servers}, nil
+}
+
+type GetServerer interface {
+	GetServers() ([]*api.Server, error)
 }
 
 // Interceptor: reads the subject out of the client's cert and writes it to the RPC's context.
